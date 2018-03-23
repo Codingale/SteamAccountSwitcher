@@ -50,7 +50,7 @@ namespace SteamAccountSwitcher
 
             //Detect Steam Install...
             string result = (string)Registry.GetValue(@"HKEY_CURRENT_USER\Software\Valve\Steam", "SteamExe","");
-            if (string.IsNullOrEmpty(result)) { MessageBox.Show("Could not detect Steam Install"); }
+            if (string.IsNullOrEmpty(result)) { MessageBox.Show("Could not detect Steam Install");  return; }
 
             #region Close Steam...
             if (steam != null)
