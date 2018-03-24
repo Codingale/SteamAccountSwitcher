@@ -56,6 +56,8 @@ namespace SteamAccountSwitcher
             if (steam != null)
             {
                 steam.Kill();
+                steam.Dispose();
+                steam = null;
             }
 
             foreach (Process process in Process.GetProcessesByName("Steam.exe"))
