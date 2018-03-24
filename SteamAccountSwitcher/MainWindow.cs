@@ -25,7 +25,7 @@ namespace SteamAccountSwitcher
             InitializeComponent();
             MessageBox.Show($"This program is not associated with Valve.\nNever share {ConfigFile}");
         }
-        
+
         #region Login stuff
         private void BtnLogin_Click(object sender, EventArgs e)
         {
@@ -49,8 +49,8 @@ namespace SteamAccountSwitcher
             #endregion
 
             //Detect Steam Install...
-            string result = (string)Registry.GetValue(@"HKEY_CURRENT_USER\Software\Valve\Steam", "SteamExe","");
-            if (string.IsNullOrEmpty(result)) { MessageBox.Show("Could not detect Steam Install");  return; }
+            string result = (string)Registry.GetValue(@"HKEY_CURRENT_USER\Software\Valve\Steam", "SteamExe", "");
+            if (string.IsNullOrEmpty(result)) { MessageBox.Show("Could not detect Steam Install"); return; }
 
             #region Close Steam...
             if (steam != null)
@@ -84,7 +84,7 @@ namespace SteamAccountSwitcher
         #endregion
 
         #region Helper functions
-        private void Log(string str="")
+        private void Log(string str = "")
         {
             Action act = new Action(() => { LogBox.AppendText(str + "\r\n"); });
             if (LogBox.InvokeRequired)
@@ -141,7 +141,7 @@ namespace SteamAccountSwitcher
             popup.Close();
             popup.Dispose();
         }
-        
+
         private void DeleteOption_Click(object sender, EventArgs e)
         {
             if (AccountsGrid.Rows.Count == 0) { Log("Please select entry(s) you wish to remove."); return; }
