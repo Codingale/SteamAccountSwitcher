@@ -7,6 +7,7 @@ using Microsoft.Win32;
 using System.Diagnostics;
 using System.Threading;
 using System.Management;
+using System.Threading.Tasks;
 
 namespace SteamAccountSwitcher
 {
@@ -23,13 +24,18 @@ namespace SteamAccountSwitcher
         public MainWindow()
         {
             InitializeComponent();
-            MessageBox.Show($"This program is not associated with Valve.\nNever share {ConfigFile}");
+#if !(DEBUG)
+                MessageBox.Show($"This program is not associated with Valve.\nNever share {ConfigFile}");
+#endif
         }
 
         #region Login stuff
         private void BtnLogin_Click(object sender, EventArgs e)
         {
-            Login();
+            Task.Run(() =>
+            {
+                Login();
+            });
         }
 
         private void Login()
@@ -48,19 +54,15 @@ namespace SteamAccountSwitcher
             Log($"Logging into {UserName}");
             #endregion
 
-            //Detect Steam Install...
-            string result = (string)Registry.GetValue(@"HKEY_CURRENT_USER\Software\Valve\Steam", "SteamExe", "");
-            if (string.IsNullOrEmpty(result)) { MessageBox.Show("Could not detect Steam Install"); return; }
-
             #region Close Steam...
-            if (steam != null)
+            if (steam != null && !steam.HasExited)
             {
                 steam.Kill();
                 steam.Dispose();
                 steam = null;
             }
 
-            foreach (Process process in Process.GetProcessesByName("Steam.exe"))
+            foreach (Process process in Process.GetProcessesByName("steam"))
             {
                 try
                 {
@@ -72,11 +74,16 @@ namespace SteamAccountSwitcher
                 }
 
             }
-            Thread.Sleep(1000);
+            Thread.Sleep(2000);
+            Process[] steaminstances = Process.GetProcessesByName("steam.exe");
+            if (steaminstances.Length > 0)
+            {
+                ForceCloseSteam();
+            }
             #endregion
 
             #region Start Steam
-            ProcessStartInfo info = new ProcessStartInfo(result)
+            ProcessStartInfo info = new ProcessStartInfo(config.SteamPath)
             {
                 Arguments = $"-login \"{UserName}\" \"{Password}"
             };
@@ -105,23 +112,38 @@ namespace SteamAccountSwitcher
         /// <param name="pid">Process ID.</param>
         private static void KillProcessAndChildren(int pid)
         {
-            ManagementObjectSearcher searcher = new ManagementObjectSearcher("Select * From Win32_Process Where ParentProcessID=" + pid);
-            ManagementObjectCollection moc = searcher.Get();
-            foreach (ManagementObject mo in moc)
+            ManagementObjectSearcher processSearcher = new ManagementObjectSearcher
+              ("Select * From Win32_Process Where ParentProcessID=" + pid);
+            ManagementObjectCollection processCollection = processSearcher.Get();
+
+            // We must kill child processes first!
+            if (processCollection != null)
             {
-                KillProcessAndChildren(Convert.ToInt32(mo["ProcessID"]));
+                foreach (ManagementObject mo in processCollection)
+                {
+                    KillProcessAndChildren(Convert.ToInt32(mo["ProcessID"])); //kill child processes(also kills childrens of childrens etc.)
+                }
             }
+
+            // Then kill parents.
             try
             {
                 Process proc = Process.GetProcessById(pid);
-                proc.CloseMainWindow();
-                proc.Close();
-                proc.Kill();
+                if (!proc.HasExited) proc.Kill();
             }
             catch (ArgumentException)
             {
                 // Process already exited.
             }
+        }
+        private static void ForceCloseSteam()
+        {
+            ProcessStartInfo info = new ProcessStartInfo("taskkill")
+            {
+                Arguments = "/f /im steam.exe"
+            };
+            Process.Start(info);
+            //should exit out after it's done..
         }
         #endregion
 
@@ -157,6 +179,7 @@ namespace SteamAccountSwitcher
             {
                 AccountsGrid.Rows.RemoveAt(item.Index);
             }
+
             AccountsRegistered = new Dictionary<string, bool>();
             foreach (DataGridViewRow row in AccountsGrid.Rows)
             {
@@ -194,13 +217,34 @@ namespace SteamAccountSwitcher
 
                 AccountsRegistered.Add(account.AccountName, true);
                 AccountsGrid.Rows.Add(account.AccountName, account.Password);
+            }
+            if (string.IsNullOrEmpty(config.SteamPath))
+            {
+                //Detect Steam Install...
+                config.SteamPath = (string)Registry.GetValue(@"HKEY_CURRENT_USER\Software\Valve\Steam", "SteamExe", "");
+                if (string.IsNullOrEmpty(config.SteamPath))
+                {
+                    MessageBox.Show("Could not detect Steam Install, please set it manually.");
+                    ToolStripItem Steam = MenuBar.Items.Add("&Set Steam Install Location");
+                    Steam.Click += SetSteamInstall;
+                    return;
+                }
+            }
+        }
 
+        private void SetSteamInstall(object sender, EventArgs e)
+        {
+            OpenFileDialog dialog = new OpenFileDialog();
+            DialogResult result = dialog.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                config.SteamPath = dialog.FileName;
+                SaveConfig();
             }
         }
 
         private void SaveConfig()
         {
-
             config.accounts = new Dictionary<string, SteamAccountDetails>();
             foreach (DataGridViewRow row in AccountsGrid.Rows)
             {
@@ -215,6 +259,5 @@ namespace SteamAccountSwitcher
             File.WriteAllText(ConfigFile, JsonConvert.SerializeObject(config, Formatting.Indented));
         }
         #endregion
-
     }
 }
