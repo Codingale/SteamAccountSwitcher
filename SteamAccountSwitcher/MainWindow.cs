@@ -66,7 +66,7 @@ namespace SteamAccountSwitcher
             {
                 try
                 {
-                    KillProcessAndChildrens(process.Id);
+                    KillProcessAndChildren(process.Id);
                 }
                 catch (Exception ex)
                 {
@@ -110,7 +110,7 @@ namespace SteamAccountSwitcher
         /// Kill a process, and all of its children.
         /// </summary>
         /// <param name="pid">Process ID.</param>
-        private static void KillProcessAndChildrens(int pid)
+        private static void KillProcessAndChildren(int pid)
         {
             ManagementObjectSearcher processSearcher = new ManagementObjectSearcher
               ("Select * From Win32_Process Where ParentProcessID=" + pid);
@@ -121,7 +121,7 @@ namespace SteamAccountSwitcher
             {
                 foreach (ManagementObject mo in processCollection)
                 {
-                    KillProcessAndChildrens(Convert.ToInt32(mo["ProcessID"])); //kill child processes(also kills childrens of childrens etc.)
+                    KillProcessAndChildren(Convert.ToInt32(mo["ProcessID"])); //kill child processes(also kills childrens of childrens etc.)
                 }
             }
 
@@ -179,6 +179,7 @@ namespace SteamAccountSwitcher
             {
                 AccountsGrid.Rows.RemoveAt(item.Index);
             }
+
             AccountsRegistered = new Dictionary<string, bool>();
             foreach (DataGridViewRow row in AccountsGrid.Rows)
             {
@@ -216,7 +217,6 @@ namespace SteamAccountSwitcher
 
                 AccountsRegistered.Add(account.AccountName, true);
                 AccountsGrid.Rows.Add(account.AccountName, account.Password);
-
             }
             if (string.IsNullOrEmpty(config.SteamPath))
             {
@@ -235,19 +235,16 @@ namespace SteamAccountSwitcher
         private void SetSteamInstall(object sender, EventArgs e)
         {
             OpenFileDialog dialog = new OpenFileDialog();
-            DialogResult result= dialog.ShowDialog();
+            DialogResult result = dialog.ShowDialog();
             if (result == DialogResult.OK)
             {
                 config.SteamPath = dialog.FileName;
                 SaveConfig();
             }
-
-
         }
 
         private void SaveConfig()
         {
-
             config.accounts = new Dictionary<string, SteamAccountDetails>();
             foreach (DataGridViewRow row in AccountsGrid.Rows)
             {

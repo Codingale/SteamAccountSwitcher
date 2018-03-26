@@ -8,6 +8,5 @@ namespace SteamAccountSwitcher
         [JsonProperty(PropertyName = "Steam Install Location")]
         public string SteamPath = "";
         public Dictionary<string, SteamAccountDetails> accounts = new Dictionary<string, SteamAccountDetails>();
-        
     }
 }
