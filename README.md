@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/Codingale/SteamAccountSwitcher.svg?branch=master)](https://travis-ci.org/Codingale/SteamAccountSwitcher)
-[![HitCount](http://hits.dwyl.io/Codingale/SteamAccountSwitcher.svg)](http://hits.dwyl.io/Codingale/SteamAccountSwitcher)
+[![Views](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2FCodingale%2FSteamAccountSwitcher&count_bg=%236EDB1B&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=Views+today+%2F+Overall&edge_flat=false)](https://hits.seeyoufarm.com)
 [![Download Counter](https://img.shields.io/github/downloads/Codingale/SteamAccountSwitcher/total.svg)](https://github.com/Codingale/SteamAccountSwitcher/releases)
 
 [![Windows Support](https://img.shields.io/static/v1?label=Windows%20Support&message=7%20and%20newer&color=brightgreen&logo=windows&style=for-the-badge)](https://github.com/Codingale/SteamAccountSwitcher/releases)
