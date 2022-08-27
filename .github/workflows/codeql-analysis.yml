@@ -44,7 +44,7 @@ jobs:
       uses: NuGet/setup-nuget@v1.0.6
       
     - name: Nuget Restore
-      run: cd SteamAccountSwitcher && nuget restore SteamAccountSwitcher.sln
+      run: nuget restore SteamAccountSwitcher.sln
 
     # Initializes the CodeQL tools for scanning.
     - name: Initialize CodeQL
