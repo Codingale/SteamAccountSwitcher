@@ -3,7 +3,9 @@
 [![Download Counter](https://img.shields.io/github/downloads/Codingale/SteamAccountSwitcher/total.svg)](https://github.com/Codingale/SteamAccountSwitcher/releases)
 
 [![Windows Support](https://img.shields.io/static/v1?label=Windows%20Support&message=7%20and%20newer&color=brightgreen&logo=windows&style=for-the-badge)](https://github.com/Codingale/SteamAccountSwitcher/releases)
-# SteamAccountSwitcher 
+# SteamAccountSwitcher
+
+Note: as of 08/25/2022 this method no longer works, I'll likely update this soon once steam figures out if it'll add a new argument for logging in. As of now this does seem to log you out, and present a login screen where you can manually enter the details. You can use other libraries that switch your login tokens around instead I believe.
 
 A fast C# approach to a [Steam Account Switcher](https://github.com/itsjfx/steam-account-switcher) that doesn't use Python and can be ran on Windows natively.
 
