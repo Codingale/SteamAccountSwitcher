@@ -66,7 +66,7 @@ namespace SteamAccountSwitcher
             {
                 try
                 {
-                    KillProcessAndChildren(process.Id);
+                    KillChildren(process.Id);
                 }
                 catch (Exception ex)
                 {
@@ -110,7 +110,7 @@ namespace SteamAccountSwitcher
         /// Kill a process, and all of its children.
         /// </summary>
         /// <param name="pid">Process ID.</param>
-        private static void KillProcessAndChildren(int pid)
+        private static void KillChildren(int pid)
         {
             ManagementObjectSearcher processSearcher = new ManagementObjectSearcher
               ("Select * From Win32_Process Where ParentProcessID=" + pid);
@@ -121,7 +121,7 @@ namespace SteamAccountSwitcher
             {
                 foreach (ManagementObject mo in processCollection)
                 {
-                    KillProcessAndChildren(Convert.ToInt32(mo["ProcessID"])); //kill child processes(also kills childrens of childrens etc.)
+                    KillChildren(Convert.ToInt32(mo["ProcessID"])); //kill child processes(also kills childrens of childrens etc.)
                 }
             }
 
