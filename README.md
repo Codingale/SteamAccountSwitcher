@@ -1,12 +1,14 @@
+# This Project is now archived
+When I first made this tool, it was super useful but as Steam has evolved over time, and now has a native feature to switch users easily thanks to the SteamDeck. This repo isn't needed anymore, me and my friends have long been using that feature, the code is still up and I welcome you to fork it and improve it, it was really only meant as a hack since Steam was lacking a feature to swap accounts easily.
+
+<hr>
+
 [![Build Status](https://travis-ci.org/Codingale/SteamAccountSwitcher.svg?branch=master)](https://travis-ci.org/Codingale/SteamAccountSwitcher)
 [![Views](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2FCodingale%2FSteamAccountSwitcher&count_bg=%236EDB1B&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=Views+today+%2F+Overall&edge_flat=false)](https://hits.seeyoufarm.com)
 [![Download Counter](https://img.shields.io/github/downloads/Codingale/SteamAccountSwitcher/total.svg)](https://github.com/Codingale/SteamAccountSwitcher/releases)
 
 [![Windows Support](https://img.shields.io/static/v1?label=Windows%20Support&message=7%20and%20newer&color=brightgreen&logo=windows&style=for-the-badge)](https://github.com/Codingale/SteamAccountSwitcher/releases)
 # SteamAccountSwitcher
-
-Note: as of 08/25/2022 this method no longer works, I'll likely update this soon once steam figures out if it'll add a new argument for logging in. As of now this does seem to log you out, and present a login screen where you can manually enter the details. You can use other libraries that switch your login tokens around instead I believe.
-
 A fast C# approach to a [Steam Account Switcher](https://github.com/itsjfx/steam-account-switcher) that doesn't use Python and can be ran on Windows natively.
 
 ## Download
